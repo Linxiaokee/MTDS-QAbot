@@ -112,11 +112,13 @@ def submit():
         markdown_text = doc.page_content
         # get images in .md
         images = read_images(doc.page_content)
-        folder_path = file_name.rsplit('\\', 1)[0]
+        folder_path = file_name.split('static', 1)[1]
+        folder_path = folder_path.rsplit('\\', 1)[0]
         folder_path = folder_path.replace('\\' ,'/')
         markdown_images = []
         for image in images:
-            image = '../' + folder_path + '/' + image
+            image = folder_path + '/' + image
+            print(image)
             markdown_images.append(image)
         md_contents.append({'file_name': file_name, 'markdown_text': markdown_text, 'markdown_images': markdown_images})
         print(markdown_images)
