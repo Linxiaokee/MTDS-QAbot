@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+    <head>
+        <title>智能客服机器人</title>
+            <script src="../static/js/vue.global.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+            <link rel="stylesheet" href="../static/css/bootstrap.css" />
+            <!--CSS实现-->
+            <style>
+                body{
+                    background-color: #e3e3e3;
+                    background-image:url();
+                    background-size:cover;
+                }
+                .square{ 
+                    position: absolute; /*绝对位置*/
+                    top: 46%;
+                    left: 30%;
+                    transform: translate(-50%, -50%);
+                    background-color: #f7f7f7;
+                    border-style:groove;
+                    border-radius: 9px;
+                    padding: 8px 5px 10px 10px;
+                    width: 1000px;
+                    height: 780px;
+                    overflow: auto; /*实现窗口滚动*/
+                }
+                .square_image {
+                    background-image:url("");
+                    position: absolute;
+                    top: 46.2%;
+                    left: 34%;
+                    transform: translate(-50%, -50%);
+                    width: 1000px;
+                    height: 825px;
+                    opacity: 0.45; /* 设置伪元素的透明度 */
+                }
+                .square p{
+                    position: relative;
+                    padding: 10px 10px 2px 70px;
+                    font-size: 35px;
+                    overflow: hidden; /* 清除浮动元素造成的高度塌陷问题 */
+                    line-height: 1.2; 
+                    font-family: "Times New Roman", Times, serif;
+                    color: #4b4b4bbf;
+                }
+                .square p::after{
+                    /*生成分隔线*/
+                    content: ""; /*伪元素*/
+                    position: absolute;
+                    left: 0;
+                    bottom: -9px;
+                    width: 100%;
+                    height: 10px;
+                    background-color: rgba(56, 56, 56, 0.689);
+                    z-index: -1;
+                }
+                .message_image {
+                    padding: 0px 5px 0px 5px;
+                    float:right;
+                    width: 65px; 
+                    margin-right: 10px; /* 调整图片与文本之间的间距 */
+                }
+                .inputter{
+                    position: absolute;
+                    top: 95.2%;
+                    left: 30%;
+                    transform: translate(-50%, -50%);
+                    width: 1000px;
+                    height: 60px;
+                    font-size: 32px;
+                    color: #767676bf;
+                    font-family: "Times New Roman", Times, serif;
+                    border-radius: 6px;
+                    padding: 12px;
+                    background-color: #f7f7f7;
+                    border: 4px solid  rgba(147, 147, 147, 0.396);
+                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.578);
+                }
+                .submission{
+                    position: absolute;
+                    top: 92.2%;
+                    left: 53.2%;
+                    width: 58px;
+                    height: 58px;
+                    background-image: url(../static/images/send.png);
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    border-radius: 8px;
+                    border-color: #787878bf;
+                }
+                .button_set {
+                    position: absolute;
+                    top: 77%;
+                    left: 95%;
+                    transform: translate(-50%, -50%);
+                    display: flex;
+                    flex-direction: column; /*flex定义按钮组排版*/
+                }
+                .custom_button {
+                    transform: translate(-50%, -50%);
+                    width: 450px;
+                    height: 52px;
+                    background-color: #ffffff00;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.539);
+                    color: rgba(106, 106, 106, 0.678);
+                    border-color:rgba(147, 147, 147, 0.396);
+                    border: solid;
+                    border-radius: 4px;
+                    padding: 5px 20px;
+                    font-size: 21px;
+                    margin:5px;
+                    transition: background-color 0.3s, color 0.3s; /* 添加过渡效果 */
+                    cursor: pointer;
+                }
+                .custom_button:hover{
+                     /*悬停改变按钮样式*/
+                    color: #ffffff;
+                    border-color: #ffffff00;
+                    background-color:rgba(147, 147, 147, 0.678);
+                }
+                .vertical_line {
+                    position: absolute;
+                    top: 50%;
+                    left: 63%;
+                    transform: translate(-50%, -50%);
+
+                    height: 96%;
+                    border-color:rgba(147, 147, 147, 0.396);
+                    border-style: solid;
+                }
+                .container{
+                    position: absolute;
+                    top: 74.9%;
+                    left: 82.3%;
+                    transform: translate(-50%, -50%);
+                    border-radius: 9px;
+                    border-style:groove;
+                    width: 530px;
+                    height: 450px;
+                    background-color:#f7f7f7;
+                }
+                .container p{
+                    line-height: 1.5;
+                    word-spacing: 138px;
+                    white-space: pre;
+                    font-weight: bold;
+                    font-family: "Times New Roman", Times, serif;
+                    font-size: 32px;
+                    padding: 8px 0px 0px 8px;
+                    color: #4b4b4bbf;
+                }
+                .container p::after{
+                    content: "";
+                    display: block;
+                    height: 148px; /* 设置行间距 */
+                }
+                .changer{
+                    position: absolute;
+                    top: 92.6%;
+                    left: 89%;
+                    transform: translate(-50%, -50%);
+                    background-image: url(../static/images/change.png);
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    width: 40px;
+                    height: 40px;
+                    border-color: #787878bf;
+                    border-radius: 8px;
+                }
+                .markdown{
+                    position: absolute;
+                    top:25%;
+                    left:82.3%;
+                    transform: translate(-50%, -50%);
+                    background-color:#f7f7f7;
+                    border-radius: 9px;
+                    border-style:groove;
+                    width: 530px;
+                    height: 413px;
+                    overflow: auto; 
+                }
+                .markdown p{
+                    font-weight: bold;
+                    font-family: "Times New Roman", Times, serif;
+                    font-size: 26px;
+                    padding: 10px 0px 0px 10px;
+                    color: #4b4b4bbf;
+                }
+                .expander{
+                    width: 100x;
+                    height: 40px;
+                    background-color: #ffffff00;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.539);
+                    color: rgba(106, 106, 106, 0.678);
+                    border: solid;
+                    border-radius: 2px;
+                    border-color: rgba(147, 147, 147, 0.396);
+                    font-size: 16px;
+                    transition: background-color 0.3s, color 0.3s; /* 添加过渡效果 */
+                    cursor: pointer;
+                }
+                .expander:hover{
+                    color: #ffffff;
+                    border-color: #ffffff00;
+                    background-color:rgba(147, 147, 147, 0.678);
+                }
+                .hr{
+                    border:1px groove rgba(84, 84, 84, 0.396);
+                }
+                #loading{
+                    position: absolute;
+                    top:89.6%;
+                    left:7.8%;
+                    transform: translate(-50%, -50%);
+                    font-size: 24px;
+                    color:rgba(74, 74, 74, 0.678);
+                    font-family: "Times New Roman", Times, serif;
+                }
+            </style>
+    </head>
+
+    <body>
+        <div id="app">
+
+            <!--背景-->
+            <div class="square_image" alt="Background Image"></div>
+            <!--装饰性竖线-->
+            <div class="vertical_line">.</div>
+            <!--显示“正在生成答案...”-->
+            <p id="loading"> </p>
+            
+            <!--Markdown显示框-->
+            <div class="markdown">
+                <p>.md参考</p>   
+                <hr class="hr">
+                <!-- 文本和图片对应展示 -->
+                <div v-for="(item,index) in mdContent" :key="item.id">
+                    <!-- 添加按钮 -->
+                    <button class="expander" @click="toggleExpand(item)">{{item.filename}}</button>
+                    <div class="mdText" v-show="item.expanded">
+                        <p v-html="addLineBreaks(item.text)"></p>
+                    </div>
+                    <div v-for="image in item.image" :key="image" v-show="item.expanded">
+                        <img :src="basePath + image" alt="">
+                    </div>
+                    <!-- 在每个按钮组之后生成分隔线 -->
+                    <hr class="hr" v-if="(index + 1) % mdFileCount == 0">
+                </div>
+            </div>
+
+            <!--回答显示文本框-->
+            <div class="square">
+                <!--问答信息-->
+                <div class="message" v-for="message in messages" :key="message.id">
+                    <img class="message_image" :src="message.imageUrl" alt=Image">
+                    <p v-html="addLineBreaks(message.text)"></p>
+                </div>
+            </div>
+            
+            <!--“换一批”框架-->
+            <div class="container">
+                <p>猜你想问:</p>
+                <p></p>
+                <p>&nbsp;&nbsp;换一批</p>
+                <button class="changer" @click="getChangeCircle()"></button>
+            </div>
+
+            <!--“换一批”按钮组-->
+            <div class="button_set">
+                <button class="custom_button" v-for="button in buttons" 
+                v-bind:key="button.id" @click="fill(button.buttonText)">{{ button.label }}</button>
+            </div>
+
+            <!--键入框监听-->
+            <form action="./receive.py" method="post">
+                    <input class="inputter" v-model="inputText" type="text" placeholder="有什么可以帮助您的呢？">
+                    <button class="submission" v-on:click="submit"></button>
+            </form>
+        </div>
+    </body>
+
+    <script>
+        const mydata={
+            data() {  
+                return{
+
+                    //////////////////////////////
+                    basePath: '..\\static\\Data\\',//这里需要修改
+                    //////////////////////////////
+
+                    mdFileCount:0,
+                    inputText:'',
+                    responseText:'',
+                    //markdownText:[],
+                    //markdownImages:[],
+                    markdownContents:[],
+                    messages: [],
+                    mdTexts:[],
+                    mdImage:[],
+                    mdContent:[],
+                    buttonsStore:
+                    [
+                        //在每组label和buttonText中输入一致的文本
+                        { id: 1, label: '经销商咨询渠道？', buttonText: '经销商咨询渠道？' },
+                        { id: 2, label: '想知道工程经销商传单流程简介', buttonText: '想知道工程经销商传单流程简介' },
+                        { id: 3, label: '工程衣柜普通单怎么传？', buttonText: '工程衣柜普通单怎么传？' },
+                        { id: 4, label: '工程台面怎么下单', buttonText: '工程台面怎么下单' },
+                        { id: 5, label: '下单取不了号', buttonText: '下单取不了号' },
+                        //上述五个测试用例分别为：1、删去关键词的模糊问题（9.1.1）；2、自然语言补充原问题（9.1.4）；3、原问题（9.1.7）；
+                        //4、删去部分非关键词汇和标点（9.1.17）；5、倾向自然语言的模糊问题（9.1.27）
+                        { id: 6, label: '提示“未生成订单无法传单?', buttonText: '提示“未生成订单无法传单?' },
+                        { id: 7, label: '需要重传的订单修订单类别编辑不了？', buttonText: '需要重传的订单修改订单类别编辑不了？' },
+                        { id: 8, label: '跳转 vfdp 平台是改什么原因？', buttonText: '跳转 vfdp 平台是什么原因？' },
+                        { id: 9, label: '一键传单第三步提示很多英文，怎么办？', buttonText: '一键传单第三步提示很多英文，怎么办？' },
+                        { id: 10, label: '项目简称长度不能超 5 个字符？', buttonText: '项目简称长度不能超 5 个字符？' },
+                        { id: 11, label: '一键下单拆单提示这个是什么意思？', buttonText: '一键下单拆单提示这个是什么意思？' },
+                        { id: 12, label: '方案序号可以重复吗？', buttonText: '方案序号可以重复吗？' },
+                        { id: 13, label: '提示乱码怎么办？', buttonText: '提示乱码怎么办？' },
+                        { id: 14, label: '需要重传的订单， 修改订单类别编辑不了？', buttonText: '需要重传的订单， 修改订单类别编辑不了？' },
+                        { id: 15, label: '保存服务单出现以下报错怎么处理？', buttonText: '保存服务单出现以下报错怎么处理？' },
+                    ],
+                    buttons:[],     //处理后的新数据，用于输出
+                    timeStart: 0,   //截取第几组的起始参数
+                    timeEnd: 1,     //截取第几组的结束参数
+                    group: 0,       //默认为0组
+                    num: 5,         //每页展示列表的数量
+                    clickNum: 0,    //点击的次数
+                }
+            },
+
+            mounted() {
+                    this.interceptingData();
+                    try {
+                    } catch (error) {
+                    // 处理错误
+                    console.error('Error during mounted hook:', error);
+                }
+            },
+
+            methods:{
+                    //切换md文件的展开和收起状态
+                toggleExpand(item_new) {
+                    item_new.expanded = !item_new.expanded;
+                    },
+
+                //添加空行
+                addLineBreaks(text) {
+                    return text.replace(/\n/g, '<br>');
+                    },
+                
+                // “换一批”总函数
+                getChangeCircle() {
+                    if (this.buttonsStore.length > 5 && this.buttonsStore.length > this.num){
+                        this.sourceListlen();   //点击的时候获取分为几组
+                        this.autoIncre();       //每点击一次记录点击次数
+                        this.clear();
+                        this.interceptingData();
+                        }
+                    },
+
+                // “换一批”分组函数
+                //计算数据的长度，共分为几组，如果不能整除则加1
+                sourceListlen() {
+                    var len = this.buttonsStore.length; //获取源数据的长度
+                    this.group = len / this.num;
+                    if (len % this.num != 0) {
+                        this.group = parseInt(this.group) + 1;
+                    }
+                    },
+                    
+                //“换一批”重新计数函数
+                //计算将点击次数和开始截取的参数清空, 如果点击此时大于当前数据的组数，则重新开始计数
+                clear() {
+                    if (this.clickNum > this.group - 1) {
+                        this.timeStart = 0;
+                        this.timeEnd = 1;
+                        this.clickNum = 0;
+                    }
+                    },
+                
+                //“换一批”计数更新函数
+                //每点击一次，记录次数
+                autoIncre() {
+                    this.clickNum++;
+                    this.timeStart++;
+                    this.timeEnd++;
+                    },
+                
+                //“换一批”数据装载函数
+                //截取元数据内当前每组的数据，放入新数组内
+                interceptingData() {
+                    this.buttons = this.buttonsStore.slice(
+                        this.num * this.timeStart,
+                        this.num * this.timeEnd
+                        );
+                    },
+
+                //“换一批”快捷输入             
+                fill(buttonText){
+                    this.inputText=buttonText;
+                    },
+                
+                //提交问题
+                submit(){
+                    // 阻止表单的默认提交行为
+                    event.preventDefault();     
+                    if (this.inputText !== '') {
+                        this.messages.push({
+                            id: Date.now(),
+                            text: this.inputText,
+                            imageUrl:'../static/images/cat.png'
+                            });
+                    //调用发送函数
+                    //置于if语句内避免空发送
+                    this.sendMessage();
+                        } 
+                    },
+
+                //显示回答文本
+                displayResponseText(){
+                    if (this.responseText !== '') {
+                        this.messages.push({
+                            id: Date.now(),
+                            text: this.responseText,
+                            imageUrl:'../static/images/robot.png',
+                            });
+                        } 
+                    },
+/*
+                //显示.md文本
+                displayMarkdownText(){
+                    if (this.markdownText !== '') {
+                        this.mdTexts.push({
+                            id: Date.now(),
+                            text: this.markdownText,
+                            });
+                        } 
+                    },
+
+                //显示.md图片
+                displayMarkdownImages(){
+                    if (this.markdownImages.length > 0) {
+                        for (const image of this.markdownImages) {
+                            this.mdImage.push({
+                                id: Date.now(),
+                                text: this. basePath + image,
+                                });
+                            }
+                        } 
+                    },
+*/
+
+                // 显示.md文本和图片
+                displayMarkdownContents() {
+                    //清空md文件列表
+                    this.mdContent = [];
+                    if (this.markdownContents.length > 0) {
+                        this.markdownContents.forEach(content => {
+                            const html=marked.parse(content.markdown_text)
+                            const newItem = {
+                                id: Date.now(),
+                                filename:content.file_name,
+                                text: html,
+                                image: content.markdown_images,
+                                expanded: false // 添加 expanded 属性，默认为 false
+                                };
+                            this.mdContent.push(newItem);
+                            this.mdFileCount=this.markdownContents.length;
+                            });
+                        }
+                    },
+
+                //发送、接收数据
+                sendMessage() {
+                    this.displayLoading();
+                    //路由发送，定义方法、头部、数据
+                    fetch('http://localhost:5000/submit', {
+                        method: 'POST',
+                        body: JSON.stringify({ text: this.inputText }),
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        mode: 'cors',
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        //数据回传后调用一系列方法处理数据
+                        this.responseText = data.text;
+                        this.markdownContents = data.markdown_contents;
+                        this.displayResponseText();
+                        this.displayMarkdownContents();
+                        this.displayLoadingEnd();
+                    })
+                    .catch(error => {
+                        console.error('请求发送失败:', error);
+                    });
+                    //一切处理完毕后再清空inputText
+                    //避免异步处理过程中数据无法读取
+                    this.clearInputter();
+                    },
+
+                //清空inputText
+                clearInputter(){
+                    this.inputText = '';
+                    },
+
+                //显示“正在生成答案...”
+                displayLoading(){
+                    document.getElementById("loading").innerText = "正在生成答案...";
+                    },
+
+                displayLoadingEnd(){
+                    document.getElementById("loading").innerText = "";
+                    },
+                }
+                
+            }
+        Vue.createApp(mydata).mount("#app")
+    </script>
+</html>
